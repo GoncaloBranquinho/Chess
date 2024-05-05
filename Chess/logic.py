@@ -43,7 +43,7 @@ class Logic:
             "Black": "None"    
         }
         self.fens = {}
-    
+    # generate valid moves
     def generate_moves(self):
         for i, row in enumerate(self.table):
             for j, piece in enumerate(row):
@@ -52,7 +52,7 @@ class Logic:
                     piece_type = self.table[self.x1][self.y1]
                     self.choose[piece_type]()         
         self.notInCheckMoves()
-    
+    # looks if someone wins or draw
     def drawnByRepetition(self):
         position = ""
         for row in self.table:
@@ -68,6 +68,18 @@ class Logic:
             self.fens[position] = 1
         return False
     
+    def insufficientMaterial(self):
+        counter = 0
+        for row in self.table:
+            for piece in row:
+                if piece == W_KING or piece == B_KING:
+                    counter += 1
+                elif self.getPieceColor(piece) == "White" or self.getPieceColor(piece) == "Black":
+                    counter += 1 
+        if counter == 2 or self.fifty_move_counter == 100:
+            return True 
+        return False
+        
     def game_over(self):
         if self.valid_moves == []:
             for i, row in enumerate(self.table):
@@ -82,26 +94,14 @@ class Logic:
                 print(f'  {self.opositeColor[self.toMoveColor]} pieces win!!')
             return True 
         return False
-            
+    
+    # change variable's value if some player cannot cast anymore        
     def updateCastling(self):
         if self.can_cast[self.toMoveColor]:
             self.can_cast["Black"] = False if self.has_KingB_moved else True
             self.can_cast["White"] = False if self.has_KingW_moved else True
             if self.validCastling():
-                self.can_cast[self.toMoveColor] = False               
-         
-
-    def insufficientMaterial(self):
-        counter = 0
-        for row in self.table:
-            for piece in row:
-                if piece == W_KING or piece == B_KING:
-                    counter += 1
-                elif self.getPieceColor(piece) == "White" or self.getPieceColor(piece) == "Black":
-                    counter += 1 
-        if counter == 2 or self.fifty_move_counter == 100:
-            return True 
-        return False 
+                self.can_cast[self.toMoveColor] = False                
     
     def updatePieceMovements(self):
         piece = self.table[self.x1][self.y1]
@@ -165,7 +165,7 @@ class Logic:
             return "Black"
         return " "
         
-
+    # see if king is still not in check after someone's move
     def king_safe(self):
 
         directions = [(1,0),(-1,0),(0,1),(0,-1)]
@@ -249,7 +249,7 @@ class Logic:
         
         
             
-
+    # rules for each piece
     def wpawn(self):
         
         if self.x1 == (MAX_HEIGHT - 1) and self.table[self.x1-1][self.y1] == " " and self.table[self.x1-2][self.y1] == " ":
@@ -399,7 +399,7 @@ class Logic:
                                 flag = 0
                     if flag:
                         self.moves.append((self.x1,self.y1,x,y))     
-        
+    # piece promotion     
     def pawn_reach_end(self):
         promote = {
         "White": [W_KNIGHT, W_QUEEN, W_ROOK, W_BISHOP],
@@ -410,6 +410,7 @@ class Logic:
         userInput = int(input("  Promote to any of these pieces.\n  1: Knight\n  2: Queen\n  3: Rook\n  4: Bishop\n  Type the number: ")) # comment this line to get random choices
         self.table[self.x2][self.y2] = promote[self.toMoveColor][userInput-1]
     
+    # give a hint to the user if the king is in check
     def kingInCheck(self):
         for i, row in enumerate(self.table):
             for j, piece in enumerate(row):
@@ -423,13 +424,13 @@ class Logic:
     def give_hint(self):
         valid = self.convert()
         print(f'  Your king is in check!\n  Available moves:\n  {valid}')
-
+    # convert matrix indexes to Chess coordinates
     def convert(self):
         valid = []
         for move in self.valid_moves:
             valid.append((chr(move[1] + ord('A') - 1) + str(8 - move[0])) + "-" + ((chr(move[3] + ord('A') - 1)) + str(8 - move[2])))
         return valid
-    
+    # print moved piece and captured piece
     def printInfo(self):
         moved = self.table[self.x1][self.y1]
         target = self.table[self.x2][self.y2]
