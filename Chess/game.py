@@ -7,7 +7,7 @@ import time
 
  
 class Game:
- def main():
+    def main():
         # initialize the game
         player = Player("Undefined")
         board = Chessboard()
