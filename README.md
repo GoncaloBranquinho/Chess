@@ -1,7 +1,5 @@
 # Chess
-
 Terminal Chess Implementation
-
 It has some rules such as:
 
  • Legal moves
