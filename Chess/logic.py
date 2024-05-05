@@ -424,12 +424,14 @@ class Logic:
     def give_hint(self):
         valid = self.convert()
         print(f'  Your king is in check!\n  Available moves:\n  {valid}')
+    
     # convert matrix indexes to Chess coordinates
     def convert(self):
         valid = []
         for move in self.valid_moves:
             valid.append((chr(move[1] + ord('A') - 1) + str(8 - move[0])) + "-" + ((chr(move[3] + ord('A') - 1)) + str(8 - move[2])))
         return valid
+    
     # print moved piece and captured piece
     def printInfo(self):
         moved = self.table[self.x1][self.y1]
