@@ -3,7 +3,7 @@ from constants import *
 class Player:
     def __init__(self, color):
         self.color = color
-
+    # convert user input to its respective matrix indexes
     def convert(self, coor):
         if (coor[0] > 'Z'):
             coor = chr(ord(coor[0]) - 32) + coor[1] 
@@ -25,6 +25,7 @@ class Player:
                 toGo = splitInTwo[1]
                 x1, y1 = self.convert(toMove)
                 x2, y2 = self.convert(toGo)
+                # see if the input is valid
                 if self.is_in_board(x1, y1, x2, y2) and self.is_player_turn(x1, y1, table):
                     return (x1,y1,x2,y2)
                 else:
