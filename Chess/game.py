@@ -31,12 +31,12 @@ class Game:
             logic.valid_moves = []
             logic.table = board.table
             
-            # look for a possible draw or stalemate
+            # look for a draw or stalemate
             if logic.insufficientMaterial() or logic.drawnByRepetition():
                 print("  The game ends in a draw")
                 break
             
-            # get all possible moves for the respective player
+            # get all valid moves for the respective player
             logic.generate_moves()        
             
             if logic.game_over():
