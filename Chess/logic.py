@@ -43,6 +43,7 @@ class Logic:
             "Black": "None"    
         }
         self.fens = {}
+    
     # generate valid moves
     def generate_moves(self):
         for i, row in enumerate(self.table):
@@ -52,6 +53,7 @@ class Logic:
                     piece_type = self.table[self.x1][self.y1]
                     self.choose[piece_type]()         
         self.notInCheckMoves()
+    
     # looks if someone wins or draw
     def drawnByRepetition(self):
         position = ""
